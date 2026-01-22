@@ -3,6 +3,7 @@ package com.example.views2_4180_121
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -27,14 +28,15 @@ class MainActivity : AppCompatActivity() {
         val calc: Button = findViewById(R.id.button2)
         val c2f: RadioButton = findViewById(R.id.cTof)
         val f2c: RadioButton = findViewById(R.id.fToc)
+        val rg: RadioGroup = findViewById(R.id.radioGroup)
 
         calc.setOnClickListener {
             Toast.makeText(this, "Please enter a temperature to convert", Toast.LENGTH_LONG).show()
         }
 
 
-        c2f.setOnCheckedChangeListener { _, _ ->
-            calc.setOnClickListener {
+        f2c.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
                 calc.setOnClickListener {
                     try {
                         val temp: Float = inputText.text.toString().toFloat()
@@ -48,15 +50,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        f2c.setOnCheckedChangeListener { _, _ ->
-            calc.setOnClickListener {
-                try {
-                    val temp: Float = inputText.text.toString().toFloat()
-                    val conv: Float = (temp * 9/5) + 32
-                    val txt = "${conv}F"
-                    convText.text = txt
-                } catch (e: NumberFormatException) {
-                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        c2f.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                calc.setOnClickListener {
+                    try {
+                        val temp: Float = inputText.text.toString().toFloat()
+                        val conv: Float = (temp * 9/5) + 32
+                        val txt = "${conv}F"
+                        convText.text = txt
+                    } catch (e: NumberFormatException) {
+                        Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         reset.setOnClickListener {
             convText.text = "N/A"
             inputText.text?.clear()
+            rg.clearCheck()
         }
 
     }
